@@ -1,0 +1,163 @@
+﻿<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>選物商品清單</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 30px 15px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+      letter-spacing: 2px;
+    }
+
+    .grid {
+      max-width: 1200px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 22px;
+    }
+
+    .item {
+      background: #ffffff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+      position: relative;
+      transition: transform 0.2s;
+    }
+
+    .item:hover {
+      transform: translateY(-4px);
+    }
+
+    .item img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      cursor: pointer;
+    }
+
+    .content {
+      padding: 14px;
+      text-align: center;
+    }
+
+    .name {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .stock {
+      font-size: 14px;
+      color: #666;
+    }
+
+    .low {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #e74c3c;
+      color: #fff;
+      font-size: 12px;
+      padding: 4px 8px;
+      border-radius: 20px;
+    }
+
+    /* 圖片放大 */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .overlay img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>選物商品列表</h1>
+
+<div class="grid">
+
+  <!-- 商品 1～20 -->
+  <div class="item"><img src="https://picsum.photos/300/200?random=1" onclick="zoom(this)"><div class="content"><div class="name">商品 1</div><div class="stock">庫存：15</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=2" onclick="zoom(this)"><div class="content"><div class="name">商品 2</div><div class="stock">庫存：8</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=3" onclick="zoom(this)"><div class="content"><div class="name">商品 3</div><div class="stock">庫存：20</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=4" onclick="zoom(this)"><div class="content"><div class="name">商品 4</div><div class="stock">庫存：3</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=5" onclick="zoom(this)"><div class="content"><div class="name">商品 5</div><div class="stock">庫存：12</div></div></div>
+
+  <div class="item"><img src="https://picsum.photos/300/200?random=6" onclick="zoom(this)"><div class="content"><div class="name">商品 6</div><div class="stock">庫存：6</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=7" onclick="zoom(this)"><div class="content"><div class="name">商品 7</div><div class="stock">庫存：18</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=8" onclick="zoom(this)"><div class="content"><div class="name">商品 8</div><div class="stock">庫存：2</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=9" onclick="zoom(this)"><div class="content"><div class="name">商品 9</div><div class="stock">庫存：9</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=10" onclick="zoom(this)"><div class="content"><div class="name">商品 10</div><div class="stock">庫存：14</div></div></div>
+
+  <div class="item"><img src="https://picsum.photos/300/200?random=11" onclick="zoom(this)"><div class="content"><div class="name">商品 11</div><div class="stock">庫存：5</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=12" onclick="zoom(this)"><div class="content"><div class="name">商品 12</div><div class="stock">庫存：11</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=13" onclick="zoom(this)"><div class="content"><div class="name">商品 13</div><div class="stock">庫存：7</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=14" onclick="zoom(this)"><div class="content"><div class="name">商品 14</div><div class="stock">庫存：1</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=15" onclick="zoom(this)"><div class="content"><div class="name">商品 15</div><div class="stock">庫存：16</div></div></div>
+
+  <div class="item"><img src="https://picsum.photos/300/200?random=16" onclick="zoom(this)"><div class="content"><div class="name">商品 16</div><div class="stock">庫存：4</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=17" onclick="zoom(this)"><div class="content"><div class="name">商品 17</div><div class="stock">庫存：13</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=18" onclick="zoom(this)"><div class="content"><div class="name">商品 18</div><div class="stock">庫存：10</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=19" onclick="zoom(this)"><div class="content"><div class="name">商品 19</div><div class="stock">庫存：2</div></div></div>
+  <div class="item"><img src="https://picsum.photos/300/200?random=20" onclick="zoom(this)"><div class="content"><div class="name">商品 20</div><div class="stock">庫存：19</div></div></div>
+
+</div>
+
+<div class="overlay" onclick="closeZoom()">
+  <img id="zoomImg">
+</div>
+
+<script>
+  // 庫存狀態判斷
+  document.querySelectorAll('.item').forEach(item => {
+    const stockEl = item.querySelector('.stock');
+    const num = parseInt(stockEl.innerText.replace('庫存：',''));
+
+    if (num < 5) stockEl.classList.add('low');
+
+    if (num <= 3) {
+      const badge = document.createElement('div');
+      badge.className = 'badge';
+      badge.innerText = '即將售完';
+      item.appendChild(badge);
+    }
+  });
+
+  function zoom(img) {
+    document.getElementById('zoomImg').src = img.src;
+    document.querySelector('.overlay').style.display = 'flex';
+  }
+
+  function closeZoom() {
+    document.querySelector('.overlay').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
+
