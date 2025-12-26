@@ -1,207 +1,284 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>套組商品清單</title>
-  <style>
-    body {
-      font-family: "Segoe UI", Arial, sans-serif;
-      background: #f4f4f4;
-      padding: 30px 15px;
-      margin: 0;
-    }
-    h1, h2 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .grid {
-      max-width: 1200px;
-      margin: auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 22px;
-      margin-bottom: 50px;
-    }
-    .item {
-      background: #fff;
-      border-radius: 14px;
-      overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-      position: relative;
-    }
-    .item img {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      cursor: pointer;
-    }
-    .content {
-      padding: 14px;
-      text-align: center;
-    }
-    .name {
-      font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 6px;
-      line-height: 1.4;
-    }
-    .stock {
-      font-size: 13px;
-      color: #555;
-    }
-    .low {
-      color: #c0392b;
-      font-weight: bold;
-    }
-    .badge {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      background: #e74c3c;
-      color: #fff;
-      font-size: 12px;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-    .overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.8);
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-    }
-    .overlay img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 10px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>彭老師教室｜活動集點兌換</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background:#f6f6f6;
+  color:#222;
+}
+
+header{
+  text-align:center;
+  padding:40px 20px 24px;
+}
+
+header h1{
+  margin:0;
+  font-size:28px;
+  letter-spacing:2px;
+}
+
+header p{
+  margin-top:12px;
+  color:#666;
+  font-size:14px;
+  line-height:1.6;
+}
+
+.grid{
+  max-width:1200px;
+  margin:30px auto 60px;
+  padding:0 16px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:22px;
+}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  overflow:hidden;
+  box-shadow:0 8px 24px rgba(0,0,0,.06);
+  position:relative;
+}
+
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#fafafa;
+  cursor:zoom-in;
+}
+
+@media(max-width:480px){
+  .card img{height:140px;}
+}
+
+.info{
+  padding:14px;
+  text-align:center;
+}
+
+.name{
+  font-weight:600;
+  font-size:15px;
+  margin-bottom:4px;
+}
+
+.points{
+  font-size:13px;
+  color:#2c3e50;
+  margin-bottom:4px;
+}
+
+.stock{
+  font-size:13px;
+  color:#555;
+}
+
+.low{
+  color:#d35400;
+  background:#fff3e6;
+  padding:2px 6px;
+  border-radius:6px;
+  display:inline-block;
+}
+
+.sold{
+  color:#aaa;
+  text-decoration:line-through;
+}
+
+.badge{
+  position:absolute;
+  top:10px;
+  left:10px;
+  font-size:12px;
+  padding:4px 10px;
+  border-radius:20px;
+  color:#fff;
+}
+
+.soon{background:#f39c12;}
+.done{background:#95a5a6;}
+
+footer{
+  text-align:center;
+  font-size:12px;
+  color:#999;
+  padding-bottom:30px;
+}
+
+/* 放大圖 */
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  cursor:zoom-out;
+}
+
+.overlay img{
+  max-width:90%;
+  max-height:90%;
+  border-radius:10px;
+  cursor:default;
+}
+</style>
 </head>
+
 <body>
 
-<h1>穩Q套組（1組）</h1>
+<header>
+  <h1>測試中｜活動集點兌換</h1>
+  <p>
+    活動期間：2025 / 1 / 1 – 2025 / 3 / 31<br>
+    兌換時請出示本人集點紀錄，數量有限，兌完為止
+  </p>
+</header>
+
 <div class="grid">
 
-  <!-- 庫存 > 0 -->
-  <div class="item" data-stock="1">
-    <img src="https://images.unsplash.com/photo-1526401485004-2aa7f3cfc01b" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－氣泡水機－經典白</div>
-      <div class="stock">庫存：1</div>
-    </div>
+<div class="card" data-stock="1">
+  <img src="images/electrolux-kettle.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">伊萊克斯溫控電茶壺</div>
+    <div class="points">兌換點數：180 點</div>
+    <div class="stock">剩餘數量：1</div>
   </div>
+</div>
 
-  <div class="item" data-stock="1">
-    <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－康生舒適揉感按摩披肩</div>
-      <div class="stock">庫存：1</div>
-    </div>
+<div class="card" data-stock="1">
+  <img src="images/koson-massage-shawl.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">康生舒適揉感按摩披肩</div>
+    <div class="points">兌換點數：160 點</div>
+    <div class="stock">剩餘數量：1</div>
   </div>
+</div>
 
-  <div class="item" data-stock="1">
-    <img src="https://images.unsplash.com/photo-1598970434795-0c54fe7c0648" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－新秀麗迷你手提行李箱</div>
-      <div class="stock">庫存：1</div>
-    </div>
+<div class="card" data-stock="1">
+  <img src="images/samsonite-mini-case.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">新秀麗迷你手提行李箱</div>
+    <div class="points">兌換點數：220 點</div>
+    <div class="stock">剩餘數量：1</div>
   </div>
+</div>
 
-  <div class="item" data-stock="7">
-    <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－紐崔萊90週年運動毛巾</div>
-      <div class="stock">庫存：7</div>
-    </div>
+<div class="card" data-stock="1">
+  <img src="images/heating-pad.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">舒緩暖敷墊</div>
+    <div class="points">兌換點數：120 點</div>
+    <div class="stock">剩餘數量：1</div>
   </div>
+</div>
 
-  <div class="item" data-stock="7">
-    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－XS經典鴨舌帽</div>
-      <div class="stock">庫存：7</div>
-    </div>
+<div class="card" data-stock="1">
+  <img src="images/whirlpool-dehumidifier-6l.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">惠而浦 6 公升除濕機</div>
+    <div class="points">兌換點數：260 點</div>
+    <div class="stock">剩餘數量：1</div>
   </div>
+</div>
 
-  <div class="item" data-stock="15">
-    <img src="https://images.unsplash.com/photo-1526403226-0d1e8d1c90d3" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－90週年香蕉黃搖搖杯</div>
-      <div class="stock">庫存：15</div>
-    </div>
+<div class="card" data-stock="7">
+  <img src="images/xs-classic-cap.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">XS 經典鴨舌帽</div>
+    <div class="points">兌換點數：60 點</div>
+    <div class="stock">剩餘數量：7</div>
   </div>
+</div>
 
-  <div class="item" data-stock="35">
-    <img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－紐崔萊90週年購物提袋</div>
-      <div class="stock">庫存：35</div>
-    </div>
+<div class="card" data-stock="8">
+  <img src="images/nutrilite-towel-90.png" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">紐崔萊 90 週年運動毛巾</div>
+    <div class="points">兌換點數：50 點</div>
+    <div class="stock">剩餘數量：8</div>
   </div>
+</div>
 
-  <div class="item" data-stock="80">
-    <img src="https://images.unsplash.com/photo-1606813909023-4c6b5f20c41c" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－紐崔萊90週年保溫壺</div>
-      <div class="stock">庫存：80</div>
-    </div>
+<div class="card" data-stock="15">
+  <img src="images/soda-maker-white.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">氣泡水機（經典白）</div>
+    <div class="points">兌換點數：140 點</div>
+    <div class="stock">剩餘數量：15</div>
   </div>
+</div>
 
-  <!-- 庫存 = 0，自動排最後 -->
-  <div class="item" data-stock="0">
-    <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－環保輕量瑜珈墊</div>
-      <div class="stock">庫存：0</div>
-    </div>
+<div class="card" data-stock="15">
+  <img src="images/shaker-banana-yellow.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">90 週年香蕉黃搖搖杯</div>
+    <div class="points">兌換點數：40 點</div>
+    <div class="stock">剩餘數量：15</div>
   </div>
+</div>
 
-  <div class="item" data-stock="0">
-    <img src="https://images.unsplash.com/photo-1518976024611-488f13d0d55b" onclick="zoom(this)">
-    <div class="content">
-      <div class="name">贈品－伊萊克斯溫控電茶壺</div>
-      <div class="stock">庫存：0</div>
-    </div>
+<div class="card" data-stock="70">
+  <img src="images/nutrilite-shopping-bag-90.png" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">紐崔萊 90 週年購物提袋</div>
+    <div class="points">兌換點數：30 點</div>
+    <div class="stock">剩餘數量：70</div>
   </div>
+</div>
+
+<div class="card" data-stock="155">
+  <img src="images/nutrilite-thermos-90.jpg" onclick="zoom(this)">
+  <div class="info">
+    <div class="name">紐崔萊 90 週年保溫壺</div>
+    <div class="points">兌換點數：80 點</div>
+    <div class="stock">剩餘數量：155</div>
+  </div>
+</div>
 
 </div>
 
-<!-- 放大圖片 -->
+<footer>
+  © 圖片僅供示意，實際兌換品項與數量以教室現場公告為準
+</footer>
+
 <div class="overlay" onclick="this.style.display='none'">
   <img id="zoomImg">
 </div>
 
 <script>
-  // 排序：庫存 0 移到最後
-  document.querySelectorAll('.grid').forEach(grid => {
-    [...grid.children]
-      .sort((a, b) => b.dataset.stock - a.dataset.stock)
-      .forEach(el => grid.appendChild(el));
-  });
+document.querySelectorAll('.card').forEach(card=>{
+  const stock = parseInt(card.dataset.stock);
+  const info = card.querySelector('.stock');
 
-  // 庫存視覺提示
-  document.querySelectorAll('.item').forEach(item => {
-    const stock = parseInt(item.dataset.stock);
-    const stockEl = item.querySelector('.stock');
-
-    if (stock < 5) stockEl.classList.add('low');
-    if (stock <= 3 && stock > 0) {
-      const badge = document.createElement('div');
-      badge.className = 'badge';
-      badge.innerText = '即將售完';
-      item.appendChild(badge);
-    }
-  });
-
-  function zoom(img) {
-    document.getElementById('zoomImg').src = img.src;
-    document.querySelector('.overlay').style.display = 'flex';
+  if(stock <= 0){
+    info.innerText = '已送完';
+    info.classList.add('sold');
+    card.insertAdjacentHTML('afterbegin','<div class="badge done">已送完</div>');
+  }else if(stock <= 3){
+    info.classList.add('low');
+    card.insertAdjacentHTML('afterbegin','<div class="badge soon">即將送完</div>');
   }
+});
+
+function zoom(img){
+  document.getElementById('zoomImg').src = img.src;
+  document.querySelector('.overlay').style.display='flex';
+}
+
+document.querySelector('.overlay img').onclick = e => e.stopPropagation();
 </script>
 
 </body>
 </html>
-
-
