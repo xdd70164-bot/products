@@ -1,71 +1,58 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <title>選物商品清單</title>
+  <title>套組商品清單</title>
   <style>
     body {
-      margin: 0;
       font-family: "Segoe UI", Arial, sans-serif;
       background: #f4f4f4;
       padding: 30px 15px;
+      margin: 0;
     }
-
-    h1 {
+    h1, h2 {
       text-align: center;
-      margin-bottom: 30px;
-      letter-spacing: 2px;
+      margin-bottom: 20px;
     }
-
     .grid {
       max-width: 1200px;
       margin: auto;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 22px;
+      margin-bottom: 50px;
     }
-
     .item {
-      background: #ffffff;
+      background: #fff;
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 8px 20px rgba(0,0,0,0.08);
       position: relative;
-      transition: transform 0.2s;
     }
-
-    .item:hover {
-      transform: translateY(-4px);
-    }
-
     .item img {
       width: 100%;
       height: 160px;
       object-fit: cover;
       cursor: pointer;
     }
-
     .content {
       padding: 14px;
       text-align: center;
     }
-
     .name {
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
       margin-bottom: 6px;
+      line-height: 1.4;
     }
-
     .stock {
-      font-size: 14px;
-      color: #666;
+      font-size: 13px;
+      color: #555;
     }
-
     .low {
       color: #c0392b;
       font-weight: bold;
     }
-
     .badge {
       position: absolute;
       top: 10px;
@@ -73,11 +60,9 @@
       background: #e74c3c;
       color: #fff;
       font-size: 12px;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 20px;
     }
-
-    /* 圖片放大 */
     .overlay {
       display: none;
       position: fixed;
@@ -87,7 +72,6 @@
       align-items: center;
       z-index: 999;
     }
-
     .overlay img {
       max-width: 90%;
       max-height: 90%;
@@ -97,50 +81,113 @@
 </head>
 <body>
 
-<h1>選物商品列表</h1>
-
+<h1>穩Q套組（1組）</h1>
 <div class="grid">
 
-  <!-- 商品 1～20 -->
-  <div class="item"><img src="https://picsum.photos/300/200?random=1" onclick="zoom(this)"><div class="content"><div class="name">商品 1</div><div class="stock">庫存：15</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=2" onclick="zoom(this)"><div class="content"><div class="name">商品 2</div><div class="stock">庫存：8</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=3" onclick="zoom(this)"><div class="content"><div class="name">商品 3</div><div class="stock">庫存：20</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=4" onclick="zoom(this)"><div class="content"><div class="name">商品 4</div><div class="stock">庫存：3</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=5" onclick="zoom(this)"><div class="content"><div class="name">商品 5</div><div class="stock">庫存：12</div></div></div>
+  <!-- 庫存 > 0 -->
+  <div class="item" data-stock="1">
+    <img src="https://images.unsplash.com/photo-1526401485004-2aa7f3cfc01b" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－氣泡水機－經典白</div>
+      <div class="stock">庫存：1</div>
+    </div>
+  </div>
 
-  <div class="item"><img src="https://picsum.photos/300/200?random=6" onclick="zoom(this)"><div class="content"><div class="name">商品 6</div><div class="stock">庫存：6</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=7" onclick="zoom(this)"><div class="content"><div class="name">商品 7</div><div class="stock">庫存：18</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=8" onclick="zoom(this)"><div class="content"><div class="name">商品 8</div><div class="stock">庫存：2</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=9" onclick="zoom(this)"><div class="content"><div class="name">商品 9</div><div class="stock">庫存：9</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=10" onclick="zoom(this)"><div class="content"><div class="name">商品 10</div><div class="stock">庫存：14</div></div></div>
+  <div class="item" data-stock="1">
+    <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－康生舒適揉感按摩披肩</div>
+      <div class="stock">庫存：1</div>
+    </div>
+  </div>
 
-  <div class="item"><img src="https://picsum.photos/300/200?random=11" onclick="zoom(this)"><div class="content"><div class="name">商品 11</div><div class="stock">庫存：5</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=12" onclick="zoom(this)"><div class="content"><div class="name">商品 12</div><div class="stock">庫存：11</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=13" onclick="zoom(this)"><div class="content"><div class="name">商品 13</div><div class="stock">庫存：7</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=14" onclick="zoom(this)"><div class="content"><div class="name">商品 14</div><div class="stock">庫存：1</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=15" onclick="zoom(this)"><div class="content"><div class="name">商品 15</div><div class="stock">庫存：16</div></div></div>
+  <div class="item" data-stock="1">
+    <img src="https://images.unsplash.com/photo-1598970434795-0c54fe7c0648" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－新秀麗迷你手提行李箱</div>
+      <div class="stock">庫存：1</div>
+    </div>
+  </div>
 
-  <div class="item"><img src="https://picsum.photos/300/200?random=16" onclick="zoom(this)"><div class="content"><div class="name">商品 16</div><div class="stock">庫存：4</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=17" onclick="zoom(this)"><div class="content"><div class="name">商品 17</div><div class="stock">庫存：13</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=18" onclick="zoom(this)"><div class="content"><div class="name">商品 18</div><div class="stock">庫存：10</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=19" onclick="zoom(this)"><div class="content"><div class="name">商品 19</div><div class="stock">庫存：2</div></div></div>
-  <div class="item"><img src="https://picsum.photos/300/200?random=20" onclick="zoom(this)"><div class="content"><div class="name">商品 20</div><div class="stock">庫存：19</div></div></div>
+  <div class="item" data-stock="7">
+    <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－紐崔萊90週年運動毛巾</div>
+      <div class="stock">庫存：7</div>
+    </div>
+  </div>
+
+  <div class="item" data-stock="7">
+    <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－XS經典鴨舌帽</div>
+      <div class="stock">庫存：7</div>
+    </div>
+  </div>
+
+  <div class="item" data-stock="15">
+    <img src="https://images.unsplash.com/photo-1526403226-0d1e8d1c90d3" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－90週年香蕉黃搖搖杯</div>
+      <div class="stock">庫存：15</div>
+    </div>
+  </div>
+
+  <div class="item" data-stock="35">
+    <img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－紐崔萊90週年購物提袋</div>
+      <div class="stock">庫存：35</div>
+    </div>
+  </div>
+
+  <div class="item" data-stock="80">
+    <img src="https://images.unsplash.com/photo-1606813909023-4c6b5f20c41c" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－紐崔萊90週年保溫壺</div>
+      <div class="stock">庫存：80</div>
+    </div>
+  </div>
+
+  <!-- 庫存 = 0，自動排最後 -->
+  <div class="item" data-stock="0">
+    <img src="https://images.unsplash.com/photo-1517705008128-361805f42e86" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－環保輕量瑜珈墊</div>
+      <div class="stock">庫存：0</div>
+    </div>
+  </div>
+
+  <div class="item" data-stock="0">
+    <img src="https://images.unsplash.com/photo-1518976024611-488f13d0d55b" onclick="zoom(this)">
+    <div class="content">
+      <div class="name">贈品－伊萊克斯溫控電茶壺</div>
+      <div class="stock">庫存：0</div>
+    </div>
+  </div>
 
 </div>
 
-<div class="overlay" onclick="closeZoom()">
+<!-- 放大圖片 -->
+<div class="overlay" onclick="this.style.display='none'">
   <img id="zoomImg">
 </div>
 
 <script>
-  // 庫存狀態判斷
+  // 排序：庫存 0 移到最後
+  document.querySelectorAll('.grid').forEach(grid => {
+    [...grid.children]
+      .sort((a, b) => b.dataset.stock - a.dataset.stock)
+      .forEach(el => grid.appendChild(el));
+  });
+
+  // 庫存視覺提示
   document.querySelectorAll('.item').forEach(item => {
+    const stock = parseInt(item.dataset.stock);
     const stockEl = item.querySelector('.stock');
-    const num = parseInt(stockEl.innerText.replace('庫存：',''));
 
-    if (num < 5) stockEl.classList.add('low');
-
-    if (num <= 3) {
+    if (stock < 5) stockEl.classList.add('low');
+    if (stock <= 3 && stock > 0) {
       const badge = document.createElement('div');
       badge.className = 'badge';
       badge.innerText = '即將售完';
@@ -152,12 +199,9 @@
     document.getElementById('zoomImg').src = img.src;
     document.querySelector('.overlay').style.display = 'flex';
   }
-
-  function closeZoom() {
-    document.querySelector('.overlay').style.display = 'none';
-  }
 </script>
 
 </body>
 </html>
+
 
