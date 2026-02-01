@@ -1,7 +1,7 @@
 const players = [
   { no:1, name:"劉智瑋", score:41 },
   { no:2, name:"廖浩君", score:40 },
-  { no:3, name:"蔡忠翔", score:37 },
+  { no:3, name:"蔡忠栩", score:37 },
   { no:4, name:"游漢威", score:36 },
   { no:5, name:"吳柏逸", score:30 },
   { no:6, name:"陳嬿云", score:21 },
