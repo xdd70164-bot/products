@@ -12,7 +12,7 @@ const players = [
   { no:11, name:"黃春僑", score:18 },
   { no:12, name:"吳淑平", score:18 },
   { no:13, name:"陳靜姿", score:17 },
-  { no:14, name:"蔡秉恒", score:16 },
+  { no:14, name:"蔡秉桓", score:16 },
   { no:15, name:"沈怡伶/關仲堯", score:15 },
   { no:16, name:"洪楚洋", score:15 },
   { no:17, name:"林子涵", score:15 },
