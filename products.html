@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>彭老師教室｜活動兌換專區</title>
+<title>1 月活動獎勵｜活動兌換專區</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -15,7 +15,7 @@ header p{margin-top:12px;color:#666;font-size:14px;line-height:1.6;}
 display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;}
 
 .card{background:#fff;border-radius:14px;overflow:hidden;
-box-shadow:0 8px 24px rgba(0,0,0,.06);position:relative;}
+box-shadow:0 8px 24px rgba(0,0,0,.06);position:relative;cursor:pointer;}
 
 .card img{width:100%;height:180px;object-fit:contain;background:#fafafa;cursor:zoom-in;}
 @media(max-width:480px){.card img{height:140px;}}
@@ -46,82 +46,82 @@ justify-content:center;align-items:center;z-index:999;}
 <body>
 
 <header>
-  <h1>活動開跑中｜活動兌換專區</h1>
+  <h1>1 月活動獎勵｜兌換專區</h1>
   <p>
-    活動期間：2026 / 1 / 1 – 2026 / 3 / 31<br>
+    活動期間：2026 / 1 / 1 – 2026 / 1 / 31<br>
     數量有限，兌完為止
   </p>
 </header>
 
 <div class="grid">
 
-<div class="card" data-stock="1"><img src="images/electrolux-kettle.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/electrolux-kettle.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">伊萊克斯溫控電茶壺</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/samsonite-mini-case.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/samsonite-mini-case.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">新秀麗迷你手提行李箱</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/worldwide-cabin-case.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/worldwide-cabin-case.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">萬國旅行登機箱</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="2"><img src="images/koson-massage-shawl.jpg" onclick="zoom(this)">
+<div class="card" data-stock="2" onclick="selectItem(this)"><img src="images/koson-massage-shawl.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">康生按摩披肩</div><div class="stock">剩餘數量：2</div></div></div>
 
-<div class="card" data-stock="2"><img src="images/nonstick-pan.jpg" onclick="zoom(this)">
+<div class="card" data-stock="2" onclick="selectItem(this)"><img src="images/nonstick-pan.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">不沾鍋</div><div class="stock">剩餘數量：2</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/frying-pan-30cm.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/frying-pan-30cm.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">30 公分炒鍋</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/tanita-body-scale.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/tanita-body-scale.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">TANITA 體脂磅秤</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="2"><img src="images/wood-bluetooth-speaker.jpg" onclick="zoom(this)">
+<div class="card" data-stock="2" onclick="selectItem(this)"><img src="images/wood-bluetooth-speaker.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">松木藍牙喇叭</div><div class="stock">剩餘數量：2</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/egg-cooker.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/egg-cooker.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">聲寶煮蛋神器</div><div class="stock">剩餘數量：1</div></div></div>
 
-<div class="card" data-stock="2"><img src="images/amway-folding-cart.jpg" onclick="zoom(this)">
+<div class="card" data-stock="2" onclick="selectItem(this)"><img src="images/amway-folding-cart.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">安麗折疊購物車</div><div class="stock">剩餘數量：2</div></div></div>
 
-<div class="card" data-stock="155"><img src="images/nutrilite-thermos-90.jpg" onclick="zoom(this)">
+<div class="card" data-stock="155" onclick="selectItem(this)"><img src="images/nutrilite-thermos-90.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年保溫壺</div><div class="stock">剩餘數量：155</div></div></div>
 
-<div class="card" data-stock="67"><img src="images/nutrilite-shopping-bag-90.png" onclick="zoom(this)">
+<div class="card" data-stock="67" onclick="selectItem(this)"><img src="images/nutrilite-shopping-bag-90.png" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年購物提袋</div><div class="stock">剩餘數量：67</div></div></div>
 
-<div class="card" data-stock="28"><img src="images/shaker-banana-yellow.jpg" onclick="zoom(this)">
+<div class="card" data-stock="28" onclick="selectItem(this)"><img src="images/shaker-banana-yellow.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">90 週年香蕉黃搖搖杯</div><div class="stock">剩餘數量：28</div></div></div>
 
-<div class="card" data-stock="16"><img src="images/nutrilite-electric-shaker.jpg" onclick="zoom(this)">
+<div class="card" data-stock="16" onclick="selectItem(this)"><img src="images/nutrilite-electric-shaker.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年電動攪拌杯</div><div class="stock">剩餘數量：16</div></div></div>
 
-<div class="card" data-stock="5"><img src="images/nutrilite-towel-90.png" onclick="zoom(this)">
+<div class="card" data-stock="5" onclick="selectItem(this)"><img src="images/nutrilite-towel-90.png" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年運動毛巾</div><div class="stock">剩餘數量：5</div></div></div>
 
-<div class="card" data-stock="2"><img src="images/nutrilite-towel-dual.jpg" onclick="zoom(this)">
+<div class="card" data-stock="2" onclick="selectItem(this)"><img src="images/nutrilite-towel-dual.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊雙色運動毛巾</div><div class="stock">剩餘數量：2</div></div></div>
 
-<div class="card" data-stock="24"><img src="images/nutrilite-neck-pillow.jpg" onclick="zoom(this)">
+<div class="card" data-stock="24" onclick="selectItem(this)"><img src="images/nutrilite-neck-pillow.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年頸枕</div><div class="stock">剩餘數量：24</div></div></div>
 
-<div class="card" data-stock="5"><img src="images/nutrilite-folding-chair.jpg" onclick="zoom(this)">
+<div class="card" data-stock="5" onclick="selectItem(this)"><img src="images/nutrilite-folding-chair.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">紐崔萊 90 週年扶手折疊椅</div><div class="stock">剩餘數量：5</div></div></div>
 
-<div class="card" data-stock="13"><img src="images/xs-classic-cap.jpg" onclick="zoom(this)">
+<div class="card" data-stock="13" onclick="selectItem(this)"><img src="images/xs-classic-cap.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">XS 經典鴨舌帽</div><div class="stock">剩餘數量：13</div></div></div>
 
-<div class="card" data-stock="4"><img src="images/xs-waterproof-bag-pink.jpg" onclick="zoom(this)">
+<div class="card" data-stock="4" onclick="selectItem(this)"><img src="images/xs-waterproof-bag-pink.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">XS 戲水袋（粉）</div><div class="stock">剩餘數量：4</div></div></div>
 
-<div class="card" data-stock="4"><img src="images/xs-waterproof-bag-yellow.jpg" onclick="zoom(this)">
+<div class="card" data-stock="4" onclick="selectItem(this)"><img src="images/xs-waterproof-bag-yellow.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">XS 戲水袋（黃）</div><div class="stock">剩餘數量：4</div></div></div>
 
-<div class="card" data-stock="6"><img src="images/eco-tableware.jpg" onclick="zoom(this)">
+<div class="card" data-stock="6" onclick="selectItem(this)"><img src="images/eco-tableware.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">環保餐具</div><div class="stock">剩餘數量：6</div></div></div>
 
-<div class="card" data-stock="1"><img src="images/adventure-cutlery-set.jpg" onclick="zoom(this)">
+<div class="card" data-stock="1" onclick="selectItem(this)"><img src="images/adventure-cutlery-set.jpg" onclick="zoom(event,this)">
 <div class="info"><div class="name">探險隨身餐具十件組</div><div class="stock">剩餘數量：1</div></div></div>
 
 </div>
@@ -133,38 +133,180 @@ justify-content:center;align-items:center;z-index:999;}
 </div>
 
 <script>
-const grid=document.querySelector('.grid');
-const cards=[...document.querySelectorAll('.card')];
+/** ============================
+ *  0) 身分與解鎖檢查（核心）
+ * ============================ */
+const me = JSON.parse(sessionStorage.getItem('me'));
+if(!me){ location.href="index.html"; }
 
-cards.forEach(c=>{
-  const s=parseInt(c.dataset.stock);
-  const info=c.querySelector('.stock');
-  if(s===0){
-    info.innerText='已送完';
-    info.classList.add('sold');
-    c.insertAdjacentHTML('afterbegin','<div class="badge done">已送完</div>');
-  }else if(s===1){
-    info.innerText='限量 1 件';
-    info.classList.add('low');
-    c.insertAdjacentHTML('afterbegin','<div class="badge gold">限量</div>');
-  }else if(s<=3){
-    info.classList.add('low');
-    c.insertAdjacentHTML('afterbegin','<div class="badge soon">即將送完</div>');
-  }
-});
+function pickedKey(){ return "picked_" + me.no; }
+function isPicked(){ return localStorage.getItem(pickedKey()) === "true"; }
 
-cards.sort((a,b)=>{
-  const sa=parseInt(a.dataset.stock),sb=parseInt(b.dataset.stock);
-  if(sa===0)return 1;
-  if(sb===0)return -1;
-  return sa-sb;
-}).forEach(c=>grid.appendChild(c));
+const currentTurn = parseInt(localStorage.getItem('currentTurn') || "1", 10);
 
-function zoom(img){
-  document.getElementById('zoomImg').src=img.src;
-  document.querySelector('.overlay').style.display='flex';
+// 已兌換 or 還沒輪到你 → 回等待頁
+if(isPicked() || currentTurn !== me.rank){
+  location.href="wait.html";
 }
+
+/** ============================
+ *  1) 庫存持久化（避免重整歸零）
+ *  - 每個品項用 src 當 key
+ * ============================ */
+const grid = document.querySelector('.grid');
+const cards = [...document.querySelectorAll('.card')];
+
+function itemIdFromCard(card){
+  const src = card.querySelector('img')?.getAttribute('src') || '';
+  return "item_" + src.replaceAll("/","_").replaceAll(".","_");
+}
+function stockKey(itemId){ return "stock_" + itemId; }
+
+function loadStock(card){
+  const itemId = itemIdFromCard(card);
+  card.dataset.itemId = itemId;
+
+  const saved = localStorage.getItem(stockKey(itemId));
+  if(saved !== null){
+    card.dataset.stock = String(parseInt(saved,10));
+  }else{
+    localStorage.setItem(stockKey(itemId), String(parseInt(card.dataset.stock,10)));
+  }
+}
+function saveStock(card){
+  const itemId = card.dataset.itemId || itemIdFromCard(card);
+  localStorage.setItem(stockKey(itemId), String(parseInt(card.dataset.stock,10)));
+}
+
+/** ============================
+ *  2) Badge / 顯示更新
+ * ============================ */
+function clearBadges(card){
+  card.querySelectorAll('.badge').forEach(b=>b.remove());
+}
+function updateCardUI(card){
+  const s = parseInt(card.dataset.stock, 10);
+  const info = card.querySelector('.stock');
+  clearBadges(card);
+
+  info.classList.remove('sold','low');
+
+  if(s <= 0){
+    info.innerText = '已送完';
+    info.classList.add('sold');
+    card.insertAdjacentHTML('afterbegin','<div class="badge done">已送完</div>');
+    return;
+  }
+
+  if(s === 1){
+    info.innerText = '限量 1 件';
+    info.classList.add('low');
+    card.insertAdjacentHTML('afterbegin','<div class="badge gold">限量</div>');
+    return;
+  }
+
+  info.innerText = `剩餘數量：${s}`;
+
+  if(s <= 3){
+    info.classList.add('low');
+    card.insertAdjacentHTML('afterbegin','<div class="badge soon">即將送完</div>');
+  }
+}
+
+/** ============================
+ *  3) 排序：已送完放最後，其他依庫存少→多
+ * ============================ */
+function sortCards(){
+  cards.sort((a,b)=>{
+    const sa=parseInt(a.dataset.stock,10), sb=parseInt(b.dataset.stock,10);
+    if(sa===0) return 1;
+    if(sb===0) return -1;
+    return sa - sb;
+  }).forEach(c=>grid.appendChild(c));
+}
+
+/** ============================
+ *  4) 記錄兌換（匯出用）
+ * ============================ */
+function savePickLog(itemName){
+  const logs = JSON.parse(localStorage.getItem('pickLog') || "[]");
+  const now = new Date();
+  const time = now.getFullYear() + "-" +
+    String(now.getMonth()+1).padStart(2,"0") + "-" +
+    String(now.getDate()).padStart(2,"0") + " " +
+    String(now.getHours()).padStart(2,"0") + ":" +
+    String(now.getMinutes()).padStart(2,"0");
+
+  logs.push({
+    rank: me.rank,
+    no: me.no,
+    name: me.name,
+    score: me.score,
+    item: itemName,
+    time
+  });
+
+  localStorage.setItem("pickLog", JSON.stringify(logs));
+}
+
+/** ============================
+ *  5) 選獎（輪到才可選 / 一人一選 / 選完回等待）
+ * ============================ */
+function selectItem(card){
+  // 防呆：已兌換 or 非本人回合
+  const current = parseInt(localStorage.getItem('currentTurn') || "1", 10);
+  if(isPicked() || current !== me.rank){
+    location.href="wait.html";
+    return;
+  }
+
+  let stock = parseInt(card.dataset.stock, 10);
+  if(stock <= 0){
+    alert("此品項已兌換完");
+    return;
+  }
+
+  const itemName = card.querySelector('.name')?.innerText?.trim() || "未命名品項";
+  if(!confirm(`輪到你了：${me.name}\n確定兌換「${itemName}」？`)) return;
+
+  // 扣庫存 + 保存
+  stock -= 1;
+  card.dataset.stock = String(stock);
+  saveStock(card);
+
+  // UI 更新
+  updateCardUI(card);
+  sortCards();
+
+  // 紀錄 + 鎖定此人
+  savePickLog(itemName);
+  localStorage.setItem(pickedKey(), "true");
+
+  // 回等待頁（你選的 B）
+  setTimeout(()=>location.href="wait.html", 600);
+}
+
+/** ============================
+ *  6) 圖片放大（保留原功能）
+ *  - 重要：阻止冒泡，不要誤觸選獎
+ * ============================ */
+function zoom(ev, img){
+  ev.stopPropagation();
+  document.getElementById('zoomImg').src = img.src;
+  document.querySelector('.overlay').style.display = 'flex';
+}
+
+/** ============================
+ *  7) 初始化
+ * ============================ */
+cards.forEach(c=>{
+  loadStock(c);
+  updateCardUI(c);
+});
+sortCards();
 </script>
 
 </body>
 </html>
+
+
