@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>1 月活動獎勵｜兌換專區</title>
+<title>彭老師教室｜活動兌換專區</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
@@ -10,145 +10,163 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;bac
 header{text-align:center;padding:40px 20px 24px;}
 header h1{margin:0;font-size:28px;letter-spacing:2px;}
 header p{margin-top:12px;color:#666;font-size:14px;line-height:1.6;}
-.grid{
-  max-width:1200px;margin:30px auto 60px;padding:0 16px;
-  display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;
-}
-.card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,.06);cursor:pointer;position:relative;}
+.grid{max-width:1200px;margin:30px auto 60px;padding:0 16px;
+display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:22px;}
+.card{background:#fff;border-radius:14px;overflow:hidden;
+box-shadow:0 8px 24px rgba(0,0,0,.06);position:relative;cursor:pointer;}
 .card.disabled{opacity:.4;pointer-events:none;}
-.card img{width:100%;height:180px;object-fit:contain;background:#fafafa;}
+.card img{width:100%;height:180px;object-fit:contain;background:#fafafa;cursor:zoom-in;}
 .info{padding:14px;text-align:center;}
 .name{font-weight:600;font-size:15px;margin-bottom:6px;}
 .stock{font-size:13px;color:#555;}
-.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);justify-content:center;align-items:center;z-index:999;}
+.low{color:#b8860b;background:#fff6dc;padding:2px 6px;border-radius:6px;display:inline-block;}
+.badge{position:absolute;top:10px;left:10px;font-size:12px;padding:4px 12px;border-radius:20px;}
+.badge.done{background:#95a5a6;color:#fff;}
+.badge.soon{background:#f39c12;color:#fff;}
+.badge.gold{
+  background:linear-gradient(135deg,#cfa63a,#f5e28c,#cfa63a);
+  color:#3a2a00;font-weight:600;
+}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);
+justify-content:center;align-items:center;z-index:999;}
 .overlay img{max-width:90%;max-height:90%;border-radius:10px;}
+footer{text-align:center;font-size:12px;color:#999;padding-bottom:30px;}
 </style>
 </head>
 
 <body>
 
 <header>
-  <h1>1 月活動獎勵｜兌換專區</h1>
-  <p>請點選你要兌換的獎品（每人限一次）</p>
+  <h1>活動開跑中｜活動兌換專區</h1>
+  <p>數量有限，兌完為止</p>
 </header>
 
-<div class="grid">
+<div class="grid" id="grid"></div>
 
-<!-- ⬇️ 每個卡片只需要指定 data-id -->
-<div class="card" data-id="kettle">
-  <img src="images/electrolux-kettle.jpg" onclick="zoom(event,this)">
-  <div class="info">
-    <div class="name">-</div>
-    <div class="stock">讀取中…</div>
-  </div>
-</div>
-
-<div class="card" data-id="samsonite">
-  <img src="images/samsonite-mini-case.jpg" onclick="zoom(event,this)">
-  <div class="info">
-    <div class="name">-</div>
-    <div class="stock">讀取中…</div>
-  </div>
-</div>
-
-<div class="card" data-id="worldwide">
-  <img src="images/worldwide-cabin-case.jpg" onclick="zoom(event,this)">
-  <div class="info">
-    <div class="name">-</div>
-    <div class="stock">讀取中…</div>
-  </div>
-</div>
-
-</div>
-
-<footer style="text-align:center;font-size:12px;color:#999;padding-bottom:30px;">
-© 圖片僅供示意，實際兌換品項以現場公告為準
-</footer>
+<footer>© 圖片僅供示意，實際兌換品項以現場公告為準</footer>
 
 <div class="overlay" onclick="this.style.display='none'">
   <img id="zoomImg">
 </div>
 
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-const firebaseConfig = {
+/* ================= Firebase ================= */
+firebase.initializeApp({
   apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
   databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app"
-};
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+});
 const db = firebase.database();
 
-/* ===== 使用者驗證 ===== */
+/* ================= 使用者驗證 ================= */
 const me = JSON.parse(sessionStorage.getItem("me"));
 if(!me) location.href="index.html";
+if(localStorage.getItem("picked_"+me.no)==="true") location.href="wait.html";
 
-if(localStorage.getItem("picked_"+me.no)==="true"){
-  location.href="wait.html";
-}
+/* ================= UI 產生 ================= */
+const grid = document.getElementById("grid");
 
-/* ===== 卡片邏輯 ===== */
-document.querySelectorAll(".card").forEach(card=>{
-  const itemId = card.dataset.id;
-  const nameEl = card.querySelector(".name");
-  const stockEl = card.querySelector(".stock");
-  const itemRef = db.ref("items/"+itemId);
+db.ref("items").on("value", snap=>{
+  if(!snap.exists()) return;
+  grid.innerHTML = "";
 
-  // 🔄 即時同步庫存
-  itemRef.on("value", snap=>{
-    if(!snap.exists()) return;
-    const { name, stock } = snap.val();
-    nameEl.innerText = name;
-    stockEl.innerText = "剩餘數量：" + stock;
-    if(stock<=0) card.classList.add("disabled");
+  const cards = [];
+
+  snap.forEach(itemSnap=>{
+    const id = itemSnap.key;
+    const { name, stock } = itemSnap.val();
+
+    const card = document.createElement("div");
+    card.className = "card";
+    card.dataset.id = id;
+    card.dataset.stock = stock;
+
+    card.innerHTML = `
+      <img src="images/${id}.jpg">
+      <div class="info">
+        <div class="name">${name}</div>
+        <div class="stock">剩餘數量：${stock}</div>
+      </div>
+    `;
+
+    // badge 規則（完全沿用你原本）
+    if(stock === 0){
+      card.classList.add("disabled");
+      card.insertAdjacentHTML("afterbegin",'<div class="badge done">已送完</div>');
+    }else if(stock === 1){
+      card.querySelector(".stock").innerText = "限量 1 件";
+      card.querySelector(".stock").classList.add("low");
+      card.insertAdjacentHTML("afterbegin",'<div class="badge gold">限量</div>');
+    }else if(stock <= 3){
+      card.querySelector(".stock").classList.add("low");
+      card.insertAdjacentHTML("afterbegin",'<div class="badge soon">即將送完</div>');
+    }
+
+    // 點擊兌換
+    card.onclick = ()=>exchange(card, id, name);
+
+    cards.push(card);
   });
 
-  card.addEventListener("click", ()=>{
-    if(card.classList.contains("disabled")) return;
-    if(!confirm(`確定要兌換「${nameEl.innerText}」嗎？`)) return;
+  // 排序（你原本的規則）
+  cards.sort((a,b)=>{
+    const sa=parseInt(a.dataset.stock), sb=parseInt(b.dataset.stock);
+    if(sa===0) return 1;
+    if(sb===0) return -1;
+    return sa-sb;
+  }).forEach(c=>grid.appendChild(c));
+});
 
-    const pickedRef = db.ref("picked/"+me.no);
+/* ================= 兌換邏輯 ================= */
+function exchange(card, id, name){
+  if(card.classList.contains("disabled")) return;
+  if(!confirm(`確定要兌換「${name}」嗎？`)) return;
 
-    pickedRef.once("value").then(p=>{
-      if(p.exists()){
-        alert("你已兌換過獎品");
-        location.href="wait.html";
+  const pickedRef = db.ref("picked/"+me.no);
+  const stockRef = db.ref("items/"+id+"/stock");
+
+  pickedRef.once("value").then(p=>{
+    if(p.exists()){
+      alert("你已兌換過獎品");
+      location.href="wait.html";
+      return;
+    }
+
+    stockRef.transaction(cur=>{
+      if(cur > 0) return cur - 1;
+    }, (err, committed)=>{
+      if(err || !committed){
+        alert("庫存不足");
         return;
       }
 
-      // 🔐 原子扣庫存
-      itemRef.child("stock").transaction(cur=>{
-        if(cur>0) return cur-1;
-      }, (err, committed)=>{
-        if(err || !committed){
-          alert("庫存不足，請重新選擇");
-          return;
-        }
+      pickedRef.set(true);
+      localStorage.setItem("picked_"+me.no,"true");
 
-        pickedRef.set(true);
-        localStorage.setItem("picked_"+me.no,"true");
-
-        db.ref("pickLog").push({
-          no: me.no,
-          name: me.name,
-          rank: me.rank,
-          item: nameEl.innerText,
-          time: new Date().toISOString()
-        });
-
-        alert(`兌換成功：${nameEl.innerText}`);
-        location.href="wait.html";
+      db.ref("pickLog").push({
+        no: me.no,
+        name: me.name,
+        rank: me.rank,
+        item: name,
+        time: new Date().toISOString()
       });
+
+      alert(`兌換成功：${name}`);
+      location.href="wait.html";
     });
   });
-});
-
-function zoom(e,img){
-  e.stopPropagation();
-  document.getElementById("zoomImg").src = img.src;
-  document.querySelector(".overlay").style.display="flex";
 }
+
+/* ================= 圖片放大 ================= */
+document.addEventListener("click",e=>{
+  if(e.target.tagName==="IMG" && e.target.closest(".card")){
+    document.getElementById("zoomImg").src = e.target.src;
+    document.querySelector(".overlay").style.display="flex";
+  }
+});
 </script>
 
 </body>
