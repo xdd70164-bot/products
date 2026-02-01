@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>1 月活動獎勵｜主持人控制</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f6f6;text-align:center;padding:40px;}
+.box{background:#fff;display:inline-block;padding:26px 28px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.08);}
+button{font-size:20px;padding:12px 20px;margin:10px;border:0;border-radius:12px;cursor:pointer;}
+.turn{font-size:36px;font-weight:700;margin:16px 0;}
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🎤 主持人控制</h2>
+  <div>目前輪到</div>
+  <div class="turn" id="turn">-</div>
+
+  <button onclick="prev()">⬅ 上一位</button>
+  <button onclick="next()">➡ 下一位</button><br>
+  <button onclick="reset()">🔄 重置為第 1 名</button>
+</div>
+
+<!-- Firebase compat SDK（純 HTML 專用） -->
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
+  authDomain: "january-reward.firebaseapp.com",
+  databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "january-reward",
+  storageBucket: "january-reward.appspot.com",
+  messagingSenderId: "881794098293",
+  appId: "1:881794098293:web:453715a4382bd6651d843c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const ref = firebase.database().ref("currentTurn");
+
+// 即時顯示目前順位
+ref.on("value", snap=>{
+  document.getElementById("turn").innerText = snap.val() ?? "-";
+});
+
+function next(){ ref.transaction(v => (v || 1) + 1); }
+function prev(){ ref.transaction(v => Math.max(1, (v || 1) - 1)); }
+function reset(){
+  if(confirm("確定重置為第 1 名？")) ref.set(1);
+}
+</script>
+
+</body>
+</html>
