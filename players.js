@@ -23,7 +23,7 @@ const players = [
   { no:22, name:"余玲鈺", score:12 },
   { no:23, name:"方婞娟", score:11 },
   { no:24, name:"劉祖睿", score:11 },
-  { no:25, name:"侯杰恩", score:11 },
+  { no:25, name:"侯沐恩", score:11 },
   { no:26, name:"呂佳樺", score:11 },
   { no:27, name:"吳聲慶", score:10 },
   { no:28, name:"劉晏慈", score:10 },
