@@ -5,20 +5,8 @@
 <title>1 月活動獎勵｜等待兌換</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <style>
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:#f6f6f6;
-  text-align:center;
-  padding:40px 16px;
-}
-.card{
-  max-width:420px;
-  margin:0 auto;
-  background:#fff;
-  padding:24px 20px 28px;
-  border-radius:16px;
-  box-shadow:0 8px 24px rgba(0,0,0,.06);
-}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f6f6;text-align:center;padding:40px;}
+.card{max-width:420px;margin:0 auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.06);}
 .small{color:#666;font-size:14px;margin-top:10px;}
 .done{color:#27ae60;font-weight:600;}
 </style>
@@ -27,30 +15,40 @@ body{
 
 <div class="card" id="box"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
 <script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
+  authDomain: "january-reward.firebaseapp.com",
+  databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "january-reward",
+  storageBucket: "january-reward.appspot.com",
+  messagingSenderId: "881794098293",
+  appId: "1:881794098293:web:453715a4382bd6651d843c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
 const me = JSON.parse(sessionStorage.getItem('me'));
 const box = document.getElementById('box');
+if(!me){ location.href="index.html"; }
 
-if(!me){
-  location.href = "index.html";
-}
+function pickedKey(){ return "picked_" + me.no; }
+function isPicked(){ return localStorage.getItem(pickedKey()) === "true"; }
 
-function pickedKey(){
-  return "picked_" + me.no;
-}
-function isPicked(){
-  return localStorage.getItem(pickedKey()) === "true";
-}
-
-function check(){
-  const current = parseInt(localStorage.getItem('currentTurn') || "1", 10);
+// 🔴 即時監聽目前順位
+db.ref("currentTurn").on("value", snap=>{
+  const current = snap.val() || 1;
 
   // 已完成
   if(isPicked()){
     box.innerHTML = `
       <div class="done">✅ 你已完成兌換</div>
       <p><b>${me.name}</b></p>
-      <div class="small">如有問題請洽工作人員</div>
+      <div class="small">請將手機交回或等待活動結束</div>
     `;
     return;
   }
@@ -64,15 +62,11 @@ function check(){
   // 尚未輪到
   box.innerHTML = `
     <h3>${me.name}</h3>
-    你的順位：第 <b>${me.rank}</b> 名（${me.score} 分）<br>
+    你的順位：第 <b>${me.rank}</b> 名<br>
     目前輪到：第 <b>${current}</b> 名
     <div class="small">尚未輪到你，請稍候</div>
   `;
-
-  setTimeout(check, 1500);
-}
-
-check();
+});
 </script>
 
 </body>
