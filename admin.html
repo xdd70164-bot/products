@@ -2,66 +2,29 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>1 月活動獎勵｜主持人控制</title>
+<title>活動管理後台｜匯出 Excel / 重置</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:#f6f6f6;
-  padding:40px;
-  text-align:center;
-}
-.box{
-  background:#fff;
-  display:inline-block;
-  padding:30px 32px;
-  border-radius:18px;
-  box-shadow:0 8px 24px rgba(0,0,0,.08);
-  min-width:340px;
-}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f6f6;padding:40px;text-align:center;}
+.box{background:#fff;display:inline-block;padding:30px 32px;border-radius:18px;box-shadow:0 8px 24px rgba(0,0,0,.08);min-width:340px;}
 h2{margin-top:0;}
-.turn{
-  font-size:42px;
-  font-weight:800;
-  margin:20px 0;
-}
-button{
-  font-size:18px;
-  padding:12px 20px;
-  margin:8px;
-  border:0;
-  border-radius:12px;
-  cursor:pointer;
-}
-.next{background:#2ecc71;color:#fff;}
-.prev{background:#3498db;color:#fff;}
-.reset{background:#f39c12;color:#fff;}
+button{font-size:18px;padding:12px 20px;margin:8px;border:0;border-radius:12px;cursor:pointer;}
 .download{background:#6c5ce7;color:#fff;}
+.reset{background:#f39c12;color:#fff;}
 .danger{background:#e74c3c;color:#fff;}
-small{
-  display:block;
-  color:#888;
-  margin-top:10px;
-  line-height:1.5;
-}
-.badge{
-  display:inline-block;
-  background:#f1f2f6;
-  color:#2d3436;
-  padding:6px 10px;
-  border-radius:999px;
-  font-size:13px;
-  margin-top:10px;
-}
+small{display:block;color:#666;margin-top:10px;line-height:1.6;}
+.badge{display:inline-block;background:#f1f2f6;color:#2d3436;padding:6px 10px;border-radius:999px;font-size:13px;margin-top:10px;}
+.turn{font-size:42px;font-weight:800;margin:18px 0;}
+.prev{background:#3498db;color:#fff;}
+.next{background:#2ecc71;color:#fff;}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h2>🎤 主持人控制台</h2>
-
+  <h2>🎛 活動管理後台</h2>
   <div class="badge" id="actName">活動：-</div>
 
   <div style="margin-top:14px;">目前輪到</div>
@@ -72,13 +35,13 @@ small{
 
   <button class="reset" onclick="resetTurn()">🔄 重置順位</button><br>
 
-  <button class="download" onclick="downloadExcelOnly()">📥 下載 Excel（不重製）</button><br>
+  <button class="download" onclick="downloadExcelOnly()">📥 一鍵匯出 Excel（不重置）</button><br>
 
-  <button class="danger" onclick="fullReset()">⚠ 一鍵重製（先下載再清空）</button>
+  <button class="danger" onclick="exportThenReset()">⚠ 匯出後重置（建議收工用）</button>
 
   <small>
-    📥 下載 Excel：只匯出「誰選什麼」不清資料<br>
-    ⚠ 一鍵重製：會先下載 Excel，再清空 pickLog、並把 currentTurn=1
+    📥 匯出 Excel：只下載，不清資料<br>
+    ⚠ 匯出後重置：會先匯出，再清空 pickLog/picked、重設庫存、currentTurn=1
   </small>
 </div>
 
@@ -86,123 +49,162 @@ small{
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
-<!-- SheetJS -->
+<!-- SheetJS（Excel） -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
 
 <script>
-/* ===================== 活動名稱 ===================== */
+/* ===================== 可自訂：活動名稱 ===================== */
 const ACTIVITY_NAME = "2026 1 月活動獎勵";
 document.getElementById("actName").innerText = "活動：" + ACTIVITY_NAME;
 
-/* ===================== Firebase ===================== */
-const firebaseConfig = {
+/* ===================== Firebase 設定 ===================== */
+firebase.initializeApp({
   apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
-  authDomain: "january-reward.firebaseapp.com",
-  databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "january-reward",
-  storageBucket: "january-reward.appspot.com",
-  messagingSenderId: "881794098293",
-  appId: "1:881794098293:web:453715a4382bd6651d843c"
-};
-if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+  databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app"
+});
 const db = firebase.database();
 
-/* ===================== 順位 ===================== */
+/* ===================== 目前順位顯示與控制 ===================== */
 const turnRef = db.ref("currentTurn");
 turnRef.on("value", snap=>{
   document.getElementById("turn").innerText = snap.val() ?? "-";
 });
 function next(){ turnRef.transaction(v => (v || 1) + 1); }
 function prev(){ turnRef.transaction(v => Math.max(1, (v || 1) - 1)); }
-function resetTurn(){
-  if(confirm("確定要把順位重置為第 1 名？")) turnRef.set(1);
+function resetTurn(){ if(confirm("確定把順位重置為第 1 名？")) turnRef.set(1); }
+
+/* ===================== 工具：格式化時間（給 Excel 好讀） ===================== */
+function toLocalTime(iso){
+  if(!iso) return "";
+  const d = new Date(iso);
+  if(isNaN(d.getTime())) return iso;
+  const pad = n => String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 }
 
-/* ===================== Excel 匯出（穩定版） ===================== */
-function downloadExcelOnly(){
-  db.ref("pickLog").once("value").then(snap=>{
-    const data = snap.val();
-    if(!data){
-      alert("目前沒有任何選獎紀錄");
-      return;
-    }
+/* ===================== ✅ 一鍵匯出 Excel（核心） ===================== */
+async function exportPickLogToExcel(){
+  // 1) 讀取 pickLog
+  const snap = await db.ref("pickLog").once("value");
+  const data = snap.val();
+  if(!data){
+    alert("目前沒有任何選獎紀錄可匯出");
+    return false;
+  }
 
-    const rows = [];
-    const countByNo = {};
+  const entries = Object.entries(data).map(([key, r]) => ({ _key: key, ...r }));
 
-    for(const k in data){
-      const r = data[k];
-      const no = Number(r.no ?? 0);
-      countByNo[no] = (countByNo[no] || 0) + 1;
-
-      rows.push({
-        活動名稱: ACTIVITY_NAME,
-        排名: Number(r.rank ?? 0),
-        編號: no,
-        姓名: r.name ?? "",
-        獎品: r.item ?? "",
-        時間: r.time ?? "",
-        異常: ""
-      });
-    }
-
-    rows.forEach(r=>{
-      if(countByNo[r.編號] > 1) r.異常 = "重複選";
-    });
-
-    rows.sort((a,b)=>{
-      if(a.排名 !== b.排名) return a.排名 - b.排名;
-      return a.時間 > b.時間 ? 1 : -1;
-    });
-
-    const ws = XLSX.utils.json_to_sheet(rows);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "誰選什麼");
-
-    const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
-    const blob = new Blob([wbout],{type:"application/octet-stream"});
-
-    const d = new Date();
-    const pad = n => String(n).padStart(2,'0');
-    const filename =
-      `誰選什麼_${ACTIVITY_NAME}_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.xlsx`
-      .replace(/[\\/:*?"<>|]/g,"_");
-
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(a.href);
+  // 2) 偵測同一 no 是否重複出現（異常標記）
+  const countByNo = {};
+  entries.forEach(r=>{
+    const no = Number(r.no ?? 0);
+    countByNo[no] = (countByNo[no] || 0) + 1;
   });
+
+  // 3) 組 Excel rows（欄位固定、好讀）
+  const rows = entries.map(r=>{
+    const no = Number(r.no ?? 0);
+    const rank = Number(r.rank ?? 0);
+    const name = r.name ?? "";
+    const item = r.item ?? "";
+    const iso = r.time ?? "";
+    const local = toLocalTime(iso);
+    const dup = (countByNo[no] > 1) ? "重複選/跨裝置" : "";
+
+    return {
+      活動名稱: ACTIVITY_NAME,
+      排名: rank || "",
+      編號: no || "",
+      姓名: name,
+      獎品: item,
+      時間_ISO: iso,
+      時間_本地: local,
+      異常: dup
+    };
+  });
+
+  // 4) 排序：先排名，再時間
+  rows.sort((a,b)=>{
+    const ra = (a.排名 === "" ? 999999 : a.排名);
+    const rb = (b.排名 === "" ? 999999 : b.排名);
+    if(ra !== rb) return ra - rb;
+    return String(a.時間_ISO).localeCompare(String(b.時間_ISO));
+  });
+
+  // 5) 產生 Excel（含欄寬）
+  const ws = XLSX.utils.json_to_sheet(rows);
+
+  // 欄寬優化（可讀性）
+  ws["!cols"] = [
+    { wch: 18 }, // 活動名稱
+    { wch: 6 },  // 排名
+    { wch: 6 },  // 編號
+    { wch: 10 }, // 姓名
+    { wch: 28 }, // 獎品
+    { wch: 24 }, // ISO
+    { wch: 20 }, // 本地
+    { wch: 14 }  // 異常
+  ];
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "誰選什麼");
+
+  // 6) 檔名：避免覆蓋
+  const d = new Date();
+  const pad = n => String(n).padStart(2,'0');
+  const filename =
+    `誰選什麼_${ACTIVITY_NAME}_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}.xlsx`
+    .replace(/[\\/:*?"<>|]/g, "_");
+
+  XLSX.writeFile(wb, filename);
+  return true;
 }
 
-/* ===================== 一鍵重製 ===================== */
-async function fullReset(){
+/* ===================== 📥 只匯出，不重置 ===================== */
+async function downloadExcelOnly(){
+  await exportPickLogToExcel();
+}
+
+/* ===================== ⚠ 匯出後重置 ===================== */
+/* 需要你 Firebase 有 initialStock（初始庫存表）：
+   initialStock/{itemId}: number
+*/
+async function exportThenReset(){
   const ok = confirm(
-    "⚠ 此動作會：\n\n" +
-    "1️⃣ 下載 Excel 備份\n" +
-    "2️⃣ 清空所有選獎資料\n" +
-    "3️⃣ 順位重設為第 1 名\n\n" +
-    "確定執行？"
+    "⚠ 警告：此動作會：\n\n" +
+    "1️⃣ 匯出 Excel（誰選什麼）\n" +
+    "2️⃣ 清空 pickLog、picked\n" +
+    "3️⃣ 庫存回到 initialStock\n" +
+    "4️⃣ currentTurn=1\n\n" +
+    "確定要執行嗎？"
   );
   if(!ok) return;
 
-  const snap = await db.ref("pickLog").once("value");
-  if(!snap.exists()){
-    alert("沒有資料可重製");
+  // 先匯出
+  const exported = await exportPickLogToExcel();
+  if(!exported) return; // 沒資料就不重置，避免誤清
+
+  // 讀 initialStock
+  const stockSnap = await db.ref("initialStock").once("value");
+  if(!stockSnap.exists()){
+    alert("找不到 initialStock，已匯出但未重置。\n請先在 Firebase 建 initialStock 再使用此功能。");
     return;
   }
+  const initial = stockSnap.val();
 
-  downloadExcelOnly();
-  await db.ref("pickLog").remove();
-  await turnRef.set(1);
+  // 組 update（一次原子更新）
+  const updates = {};
+  Object.keys(initial).forEach(id=>{
+    updates[`items/${id}/stock`] = initial[id];
+  });
+  updates["picked"] = null;
+  updates["pickLog"] = null;
+  updates["currentTurn"] = 1;
 
-  alert("✅ 已完成備份並重製");
+  await db.ref().update(updates);
+  alert("✅ 已匯出並完成重置");
 }
 </script>
 
 </body>
 </html>
-
