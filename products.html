@@ -308,5 +308,37 @@ sortCards();
 
 </body>
 </html>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
+  authDomain: "january-reward.firebaseapp.com",
+  databaseURL: "https://january-reward-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "january-reward",
+  storageBucket: "january-reward.appspot.com",
+  messagingSenderId: "881794098293",
+  appId: "1:881794098293:web:453715a4382bd6651d843c"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const me = JSON.parse(sessionStorage.getItem('me'));
+if(!me){ location.href="index.html"; }
+
+function pickedKey(){ return "picked_" + me.no; }
+function isPicked(){ return localStorage.getItem(pickedKey()) === "true"; }
+
+// 🔒 不是你的順位就進不來
+db.ref("currentTurn").once("value").then(snap=>{
+  const current = snap.val() || 1;
+  if(isPicked() || current !== me.rank){
+    location.href="wait.html";
+  }
+});
+</script>
+
 
 
