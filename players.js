@@ -62,7 +62,7 @@ const players = [
   { no:61, name:"劉宥寧", score:5 },
   { no:62, name:"詹惠玫", score:5 },
   { no:63, name:"吳燕鈴", score:5 },
-  { no:64, name:"高金玲", score:5 },
+  { no:64, name:"高金鈴", score:5 },
   { no:65, name:"高嘉興", score:5 },
   { no:66, name:"李宇駿", score:5 },
   { no:67, name:"李念宸", score:5 },
