@@ -30,10 +30,12 @@ body{
   <div class="small">資料載入中…</div>
 </div>
 
+<!-- Firebase compat SDK（純 HTML 專用） -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
+// Firebase 設定
 const firebaseConfig = {
   apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
   authDomain: "january-reward.firebaseapp.com",
@@ -58,36 +60,47 @@ try {
   me = JSON.parse(sessionStorage.getItem('me'));
 } catch(e){}
 
-// ❌ 沒有使用者資料 → 不白畫面
+// ❌ 沒有使用者資料（直接掃 wait.html 或重新整理）
 if(!me){
   box.innerHTML = `
     <div class="error">⚠ 尚未輸入姓名</div>
     <div class="small">請返回重新掃描 QR Code</div>
   `;
-  return;
+  throw new Error("No user data");
 }
 
 function pickedKey(){ return "picked_" + me.no; }
 function isPicked(){ return localStorage.getItem(pickedKey()) === "true"; }
 
-// 🔴 即時監聽 Firebase 順位
+// 🔴 即時監聽目前順位
 db.ref("currentTurn").on("value", snap=>{
-  const current = snap.val() || 1;
-
-  if(isPicked()){
+  if(!snap.exists()){
     box.innerHTML = `
-      <div class="done">✅ 你已完成兌換</div>
-      <p><b>${me.name}</b></p>
-      <div class="small">請將手機交回或等待活動結束</div>
+      <div class="error">⚠ 尚未初始化順位</div>
+      <div class="small">請通知主持人操作一次</div>
     `;
     return;
   }
 
-  if(current === me.rank){
+  const current = snap.val();
+
+  // ✅ 已完成兌換
+  if(isPicked()){
+    box.innerHTML = `
+      <div class="done">✅ 你已完成兌換</div>
+      <p><b>${me.name}</b></p>
+      <div class="small">請將手機返回或等待活動結束</div>
+    `;
+    return;
+  }
+
+  // ✅【關鍵修正】型別轉換，確保可以正確跳轉
+  if (Number(current) === Number(me.rank)) {
     location.href = "products.html";
     return;
   }
 
+  // ⏳ 尚未輪到
   box.innerHTML = `
     <h3>${me.name}</h3>
     你的順位：第 <b>${me.rank}</b> 名<br>
@@ -99,4 +112,3 @@ db.ref("currentTurn").on("value", snap=>{
 
 </body>
 </html>
-
