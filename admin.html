@@ -82,19 +82,19 @@ small{
   </small>
 </div>
 
-<!-- Firebase compat -->
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
-<!-- SheetJS（Excel 產生器） -->
+<!-- SheetJS -->
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.19.3/dist/xlsx.full.min.js"></script>
 
 <script>
-/* ===================== 可自訂：活動名稱 ===================== */
-const ACTIVITY_NAME = "2026 1 月活動獎勵"; // ← 你要改活動名稱就改這一行
+/* ===================== 活動名稱 ===================== */
+const ACTIVITY_NAME = "2026 1 月活動獎勵";
 document.getElementById("actName").innerText = "活動：" + ACTIVITY_NAME;
 
-/* ===================== Firebase 設定 ===================== */
+/* ===================== Firebase ===================== */
 const firebaseConfig = {
   apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
   authDomain: "january-reward.firebaseapp.com",
@@ -104,103 +104,105 @@ const firebaseConfig = {
   messagingSenderId: "881794098293",
   appId: "1:881794098293:web:453715a4382bd6651d843c"
 };
-
-if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+if(!firebase.apps.length) firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-/* ===================== 目前順位顯示 ===================== */
+/* ===================== 順位 ===================== */
 const turnRef = db.ref("currentTurn");
 turnRef.on("value", snap=>{
   document.getElementById("turn").innerText = snap.val() ?? "-";
 });
-
-/* ===================== 排序控制 ===================== */
 function next(){ turnRef.transaction(v => (v || 1) + 1); }
 function prev(){ turnRef.transaction(v => Math.max(1, (v || 1) - 1)); }
 function resetTurn(){
   if(confirm("確定要把順位重置為第 1 名？")) turnRef.set(1);
 }
 
-/* ===================== 共用：拉 pickLog → 產出 Excel ===================== */
-async function exportPickLogToExcel(){
-  const snap = await db.ref("pickLog").once("value");
-  const data = snap.val();
+/* ===================== Excel 匯出（穩定版） ===================== */
+function downloadExcelOnly(){
+  db.ref("pickLog").once("value").then(snap=>{
+    const data = snap.val();
+    if(!data){
+      alert("目前沒有任何選獎紀錄");
+      return;
+    }
 
-  if(!data){
-    alert("目前沒有任何選獎紀錄可下載");
-    return false;
-  }
+    const rows = [];
+    const countByNo = {};
 
-  const entries = Object.values(data);
+    for(const k in data){
+      const r = data[k];
+      const no = Number(r.no ?? 0);
+      countByNo[no] = (countByNo[no] || 0) + 1;
 
-  // 統計同一個 no 是否出現多次（跨手機/刷新等異常）
-  const countByNo = {};
-  entries.forEach(r=>{
-    const no = Number(r.no ?? 0);
-    countByNo[no] = (countByNo[no] || 0) + 1;
+      rows.push({
+        活動名稱: ACTIVITY_NAME,
+        排名: Number(r.rank ?? 0),
+        編號: no,
+        姓名: r.name ?? "",
+        獎品: r.item ?? "",
+        時間: r.time ?? "",
+        異常: ""
+      });
+    }
+
+    rows.forEach(r=>{
+      if(countByNo[r.編號] > 1) r.異常 = "重複選";
+    });
+
+    rows.sort((a,b)=>{
+      if(a.排名 !== b.排名) return a.排名 - b.排名;
+      return a.時間 > b.時間 ? 1 : -1;
+    });
+
+    const ws = XLSX.utils.json_to_sheet(rows);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "誰選什麼");
+
+    const wbout = XLSX.write(wb,{bookType:'xlsx',type:'array'});
+    const blob = new Blob([wbout],{type:"application/octet-stream"});
+
+    const d = new Date();
+    const pad = n => String(n).padStart(2,'0');
+    const filename =
+      `誰選什麼_${ACTIVITY_NAME}_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.xlsx`
+      .replace(/[\\/:*?"<>|]/g,"_");
+
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
   });
-
-  // 組列：加上「活動名稱」「是否重複選/異常」
-  const rows = entries.map(r=>{
-    const no = Number(r.no ?? 0);
-    const rank = Number(r.rank ?? 0);
-    const name = r.name ?? "";
-    const item = r.item ?? "";
-    const time = r.time ?? "";
-    const dup = (countByNo[no] > 1) ? "重複選" : "";
-
-    return {
-      活動名稱: ACTIVITY_NAME,
-      排名: rank,
-      編號: no,
-      姓名: name,
-      獎品: item,
-      時間: time,
-      異常: dup
-    };
-  }).sort((a,b)=> (a.排名 - b.排名) || (a.時間 > b.時間 ? 1 : -1));
-
-  // 產 Excel
-  const ws = XLSX.utils.json_to_sheet(rows);
-  const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, "誰選什麼");
-
-  // 檔名：含日期時間（避免覆蓋）
-  const d = new Date();
-  const pad = n => String(n).padStart(2,'0');
-  const filename =
-    `誰選什麼_${ACTIVITY_NAME}_${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.xlsx`
-      .replace(/[\\/:*?"<>|]/g, "_"); // windows 檔名安全
-
-  XLSX.writeFile(wb, filename);
-  return true;
 }
 
-/* ===================== 📥 只下載，不重製 ===================== */
-async function downloadExcelOnly(){
-  await exportPickLogToExcel();
-}
-
-/* ===================== ⚠ 一鍵重製：先下載，再清空，再重設順位 ===================== */
+/* ===================== 一鍵重製 ===================== */
 async function fullReset(){
   const ok = confirm(
-    "⚠ 警告：此動作會：\n\n" +
-    "1️⃣ 下載所有選獎紀錄 Excel（含活動名稱/異常）\n" +
-    "2️⃣ 清空所有選獎資料 pickLog\n" +
+    "⚠ 此動作會：\n\n" +
+    "1️⃣ 下載 Excel 備份\n" +
+    "2️⃣ 清空所有選獎資料\n" +
     "3️⃣ 順位重設為第 1 名\n\n" +
-    "確定要執行嗎？"
+    "確定執行？"
   );
   if(!ok) return;
 
-  const exported = await exportPickLogToExcel();
-  if(!exported) return; // 沒資料就不清
+  const snap = await db.ref("pickLog").once("value");
+  if(!snap.exists()){
+    alert("沒有資料可重製");
+    return;
+  }
 
+  downloadExcelOnly();
   await db.ref("pickLog").remove();
   await turnRef.set(1);
 
-  alert("✅ 已完成備份並重製\n請所有人重新掃描 QR Code");
+  alert("✅ 已完成備份並重製");
 }
 </script>
 
 </body>
 </html>
+
