@@ -2,58 +2,207 @@
 <html lang="zh-TW">
 <head>
 <meta charset="UTF-8">
-<title>1 月活動獎勵｜選擇獎品</title>
+<title>1 月活動獎勵｜兌換專區</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <style>
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background:#f6f6f6;
-  padding:30px;
-}
-h2{text-align:center;}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;background:#f6f6f6;color:#222;}
+header{text-align:center;padding:40px 20px 24px;}
+header h1{margin:0;font-size:28px;letter-spacing:2px;}
+header p{margin-top:12px;color:#666;font-size:14px;line-height:1.6;}
+
 .grid{
-  max-width:900px;
-  margin:20px auto;
+  max-width:1200px;
+  margin:30px auto 60px;
+  padding:0 16px;
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
+  gap:22px;
 }
+
 .card{
   background:#fff;
   border-radius:14px;
-  padding:16px;
+  overflow:hidden;
   box-shadow:0 8px 24px rgba(0,0,0,.06);
-  text-align:center;
-}
-button{
-  margin-top:10px;
-  padding:10px 16px;
-  border:none;
-  border-radius:10px;
+  position:relative;
   cursor:pointer;
 }
+.card.disabled{opacity:.4;pointer-events:none;}
+
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#fafafa;
+}
+@media(max-width:480px){.card img{height:140px;}}
+
+.info{padding:14px;text-align:center;}
+.name{font-weight:600;font-size:15px;margin-bottom:6px;}
+.stock{font-size:13px;color:#555;}
+.low{color:#b8860b;background:#fff6dc;padding:2px 6px;border-radius:6px;display:inline-block;}
+.sold{color:#aaa;text-decoration:line-through;}
+
+.badge{position:absolute;top:10px;left:10px;font-size:12px;padding:4px 12px;border-radius:20px;}
+.badge.done{background:#95a5a6;color:#fff;}
+.badge.soon{background:#f39c12;color:#fff;}
+.badge.gold{
+  background:linear-gradient(135deg,#cfa63a,#f5e28c,#cfa63a);
+  color:#3a2a00;font-weight:600;
+}
+
+.overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.85);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+.overlay img{max-width:90%;max-height:90%;border-radius:10px;}
 </style>
 </head>
+
 <body>
 
-<h2>請選擇你的獎品</h2>
+<header>
+  <h1>1 月活動獎勵｜兌換專區</h1>
+  <p>請點選你要兌換的獎品（每人限一次）</p>
+</header>
 
 <div class="grid">
-  <div class="card">
-    <h3>獎品 A</h3>
-    <button onclick="pick('獎品 A')">選擇</button>
-  </div>
-  <div class="card">
-    <h3>獎品 B</h3>
-    <button onclick="pick('獎品 B')">選擇</button>
-  </div>
+
+<div class="card" data-stock="1">
+  <img src="images/electrolux-kettle.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">伊萊克斯溫控電茶壺</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/samsonite-mini-case.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">新秀麗迷你手提行李箱</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/worldwide-cabin-case.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">萬國旅行登機箱</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="2">
+  <img src="images/koson-massage-shawl.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">康生按摩披肩</div><div class="stock">剩餘數量：2</div></div>
+</div>
+
+<div class="card" data-stock="2">
+  <img src="images/nonstick-pan.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">不沾鍋</div><div class="stock">剩餘數量：2</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/frying-pan-30cm.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">30 公分炒鍋</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/tanita-body-scale.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">TANITA 體脂磅秤</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="2">
+  <img src="images/wood-bluetooth-speaker.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">松木藍牙喇叭</div><div class="stock">剩餘數量：2</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/egg-cooker.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">聲寶煮蛋神器</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+<div class="card" data-stock="2">
+  <img src="images/amway-folding-cart.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">安麗折疊購物車</div><div class="stock">剩餘數量：2</div></div>
+</div>
+
+<div class="card" data-stock="155">
+  <img src="images/nutrilite-thermos-90.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年保溫壺</div><div class="stock">剩餘數量：155</div></div>
+</div>
+
+<div class="card" data-stock="67">
+  <img src="images/nutrilite-shopping-bag-90.png" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年購物提袋</div><div class="stock">剩餘數量：67</div></div>
+</div>
+
+<div class="card" data-stock="28">
+  <img src="images/shaker-banana-yellow.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">90 週年香蕉黃搖搖杯</div><div class="stock">剩餘數量：28</div></div>
+</div>
+
+<div class="card" data-stock="16">
+  <img src="images/nutrilite-electric-shaker.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年電動攪拌杯</div><div class="stock">剩餘數量：16</div></div>
+</div>
+
+<div class="card" data-stock="5">
+  <img src="images/nutrilite-towel-90.png" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年運動毛巾</div><div class="stock">剩餘數量：5</div></div>
+</div>
+
+<div class="card" data-stock="2">
+  <img src="images/nutrilite-towel-dual.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊雙色運動毛巾</div><div class="stock">剩餘數量：2</div></div>
+</div>
+
+<div class="card" data-stock="24">
+  <img src="images/nutrilite-neck-pillow.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年頸枕</div><div class="stock">剩餘數量：24</div></div>
+</div>
+
+<div class="card" data-stock="5">
+  <img src="images/nutrilite-folding-chair.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">紐崔萊 90 週年扶手折疊椅</div><div class="stock">剩餘數量：5</div></div>
+</div>
+
+<div class="card" data-stock="13">
+  <img src="images/xs-classic-cap.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">XS 經典鴨舌帽</div><div class="stock">剩餘數量：13</div></div>
+</div>
+
+<div class="card" data-stock="4">
+  <img src="images/xs-waterproof-bag-pink.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">XS 戲水袋（粉）</div><div class="stock">剩餘數量：4</div></div>
+</div>
+
+<div class="card" data-stock="4">
+  <img src="images/xs-waterproof-bag-yellow.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">XS 戲水袋（黃）</div><div class="stock">剩餘數量：4</div></div>
+</div>
+
+<div class="card" data-stock="6">
+  <img src="images/eco-tableware.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">環保餐具</div><div class="stock">剩餘數量：6</div></div>
+</div>
+
+<div class="card" data-stock="1">
+  <img src="images/adventure-cutlery-set.jpg" onclick="zoom(event,this)">
+  <div class="info"><div class="name">探險隨身餐具十件組</div><div class="stock">剩餘數量：1</div></div>
+</div>
+
+</div>
+
+<footer style="text-align:center;font-size:12px;color:#999;padding-bottom:30px;">
+© 圖片僅供示意，實際兌換品項以現場公告為準
+</footer>
+
+<div class="overlay" onclick="this.style.display='none'">
+  <img id="zoomImg">
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
 <script>
-/* Firebase 設定 */
 const firebaseConfig = {
   apiKey: "AIzaSyBEmxW-TqnxW3pgoXc2pfatFtqSQQkqMsE",
   authDomain: "january-reward.firebaseapp.com",
@@ -64,55 +213,53 @@ const firebaseConfig = {
   appId: "1:881794098293:web:453715a4382bd6651d843c"
 };
 
-/* 初始化 Firebase */
-if (!firebase.apps.length) {
+if(!firebase.apps.length){
   firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 
-/* 使用者資料 */
 const me = JSON.parse(sessionStorage.getItem("me"));
-if(!me){
-  location.href = "index.html";
-}
+if(!me){ location.href="index.html"; }
 
 function pickedKey(){ return "picked_" + me.no; }
-function isPicked(){ return localStorage.getItem(pickedKey()) === "true"; }
-
-/* 🔐 通行證檢查（防被踢回） */
-const pass = sessionStorage.getItem("canPick");
-if(pass !== "yes"){
-  location.href = "wait.html";
+if(localStorage.getItem(pickedKey())==="true"){
+  location.href="wait.html";
 }
-sessionStorage.removeItem("canPick");
 
-/* 再次確認順位 */
-db.ref("currentTurn").once("value").then(snap=>{
-  const current = Number(snap.val());
-  if(isPicked() || current !== Number(me.rank)){
-    location.href = "wait.html";
-  }
+document.querySelectorAll(".card").forEach(card=>{
+  const name = card.querySelector(".name").innerText;
+  const stock = parseInt(card.dataset.stock,10);
+  if(stock<=0){ card.classList.add("disabled"); return; }
+
+  card.addEventListener("click", ()=>{
+    if(!confirm(`確定要兌換「${name}」嗎？`)) return;
+
+    localStorage.setItem(pickedKey(),"true");
+
+    db.ref("pickLog").push({
+      no: me.no,
+      name: me.name,
+      rank: me.rank,
+      item: name,
+      time: new Date().toISOString()
+    });
+
+    alert(`你已成功兌換：\n${name}`);
+    location.href="wait.html";
+  });
 });
 
-/* 選擇獎品 */
-function pick(item){
-  localStorage.setItem(pickedKey(),"true");
-
-  db.ref("pickLog").push({
-    no: me.no,
-    name: me.name,
-    rank: me.rank,
-    item: item,
-    time: new Date().toISOString()
-  });
-
-  alert("你已選擇：" + item);
-  location.href = "wait.html";
+function zoom(e,img){
+  e.stopPropagation();
+  document.getElementById("zoomImg").src = img.src;
+  document.querySelector(".overlay").style.display="flex";
 }
 </script>
 
 </body>
 </html>
+
+
 
 
 
