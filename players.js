@@ -48,7 +48,7 @@ const players = [
   { no:47, name:"鄭傑明", score:6 },
   { no:48, name:"李維軒", score:6 },
   { no:49, name:"莊翔雯", score:6 },
-  { no:50, name:"丁祐禎", score:5 },
+  { no:50, name:"于祐禎", score:5 },
   { no:51, name:"林汎玲", score:5 },
   { no:52, name:"劉家妤", score:5 },
   { no:53, name:"鄭昀佳", score:5 },
