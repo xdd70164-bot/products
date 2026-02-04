@@ -1,4 +1,4 @@
-const players = [
+
  const players = [
   { no:1, name:"劉智瑋", score:41 },
   { no:2, name:"廖浩君", score:40 },
