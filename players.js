@@ -157,7 +157,7 @@
   { no:155, name:"張育誠", score:1 },
   { no:156, name:"江權芳", score:1 },
   { no:157, name:"方綺容", score:1 },
-  { no:158, name:"吳芳華 許晴涵", score:1 },
+  { no:158, name:"吳芳華/許晴涵", score:1 },
   { no:159, name:"陳紀廷", score:1 },
   { no:160, name:"黃昀宣", score:1 },
   { no:161, name:"蔡睿倫", score:1 },
