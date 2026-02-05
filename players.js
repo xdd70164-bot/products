@@ -1,5 +1,4 @@
-
- window.players = [
+window.players = [
   { no:1, name:"劉智瑋", score:41 },
   { no:2, name:"廖浩君", score:40 },
   { no:3, name:"蔡忠栩", score:37 },
